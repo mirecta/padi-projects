@@ -1,6 +1,8 @@
 /*
  This sketch shows how to open/close file and perform read/write to it.
  */
+#include "cmsis_os.h"
+ 
 #include "SdFatFs.h"
 #include "util.h"
 #include <WiFi.h>
@@ -20,8 +22,17 @@ void UserPreInit(void)
 SdFatFs fs;
 Config_t cfg;
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
+osThreadId batch_tid = 0;
 
 PadiWebServer server(80);
+
+void batch_task( void const *arg ){
+  while(1){
+  rtl_printf("batch\n");
+  osDelay(100);
+  osThreadYield();
+  }
+}
 
 void handleCmd(){
 rtl_printf("i am in \n");
@@ -81,6 +92,10 @@ void setupWIFI(){
 }
 }
 void setup() {
+  
+//start batch thread
+  osThreadDef(batch_task, osPriorityAboveNormal, 1, 4096*4);
+   batch_tid = osThreadCreate(osThread (batch_task), NULL);
   InitCryptoEngine();
   sys_info();
   fs.begin();
@@ -102,6 +117,7 @@ void setup() {
 
   server.begin();
   //fs.end();
+
 }
 
 void loop() {
