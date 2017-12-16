@@ -11,7 +11,7 @@
 #define CONFIG_DIR "/conf"
 #define CONFIG CONFIG_DIR "/" CONFIG_FILE
 
-
+extern int wifi_status;
 
 struct Config_t {
       char  ssid[20];
@@ -41,9 +41,9 @@ int split(char* buffer, char** strs, const char delimiter, int maxparts = 2);
 
 char* strip(char* buffer);
 
-
- int readConfig(SdFatFs& fat, Config_t& cfg);
-
+int writeConfig(SdFatFs& fat, const Config_t& cfg);
+int readConfig(SdFatFs& fat, Config_t& cfg);
+void setupWIFI(Config_t &cfg);
 
 
 
