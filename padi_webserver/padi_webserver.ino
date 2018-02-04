@@ -21,7 +21,7 @@ void UserPreInit(void) {
 } // extern "C"
 
 SdFatFs fs;
-Config_t cfg = {"padiap", "password", "1", true};
+Config_t cfg = {"TNODExxx", "xxxx", "1", false};
 
 int status = WL_IDLE_STATUS; // the Wifi radio's status
 osThreadId batch_tid = 0;
@@ -46,11 +46,10 @@ void setup() {
   InitCryptoEngine();
   sys_info();
   fs.begin();
-
+  //writeConfig(fs, cfg);
   readConfig(fs, cfg);
   setupWIFI(cfg);
-  server.on("/inline",
-            []() { server.send(200, "text/plain", "this works as well"); });
+ 
   server.on("/cmd", handleCmd);
   server.onNotFound(handleNotFound);
 
