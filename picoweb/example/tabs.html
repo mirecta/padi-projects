@@ -1,0 +1,482 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background-color: #222;
+      color: #aaa;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1,
+    h3 {
+      text-transform: uppercase;
+      font-weight: normal;
+    }
+
+    .tabs {
+      width: 350px;
+      display: block;
+      margin: 40px auto;
+      position: relative;
+    }
+
+    .tabs .tab {
+      float: left;
+      display: block;
+    }
+
+    .tabs .tab>input[type="radio"] {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+
+    .tabs .tab>label {
+      display: block;
+      padding: 6px 21px;
+      font-size: 14px;
+      text-transform: uppercase;
+      cursor: pointer;
+      position: relative;
+      color: #FFF;
+      background: #222;
+    }
+
+    .tabs .content {
+      z-index: 0;
+      /* or display: none; */
+      overflow: hidden;
+      width: 350px;
+      padding: 25px;
+      position: absolute;
+      top: 27px;
+      left: 0;
+      background: #303030;
+      color: #DFDFDF;
+
+      opacity: 0;
+      transition: opacity 400ms ease-out;
+    }
+
+    .tabs>.tab>[id^="tab"]:checked+label {
+      top: 0;
+      background: #303030;
+      color: #F5F5F5;
+    }
+
+    .tabs>.tab>[id^="tab"]:checked~[id^="tab-content"] {
+      z-index: 1;
+      /* or display: block; */
+      opacity: 1;
+      transition: opacity 400ms ease-out;
+    }
+
+    .led {
+      margin: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: #777;
+      margin-left: 20px;
+    }
+
+    .led-red {
+      background-color: #940;
+      box-shadow: #000 0 -1px 7px 1px, inset #600 0 -1px 9px, #F00 0 2px 12px;
+    }
+
+    .led-yellow {
+      background-color: #A90;
+      box-shadow: #000 0 -1px 7px 1px, inset #660 0 -1px 9px, #DD0 0 2px 12px;
+    }
+
+    .led-green {
+      background-color: #65d808;
+      box-shadow: #000 0 -1px 7px 1px, inset #460 0 -1px 9px, #7D0 0 2px 12px;
+    }
+
+    .led-blue {
+      background-color: #0093ff;
+      box-shadow: #000 0 -1px 7px 1px, inset #006 0 -1px 9px, #06F 0 2px 14px;
+    }
+
+    input {
+      background-color: #aaa;
+      border: 1px solid #111;
+      border-radius: 5px;
+      padding: 5px;
+      width: 120px;
+    }
+
+    .short {
+      width 50px;
+    }
+
+    button {
+      background-color: #ccc;
+      border: 1px solid #111;
+      border-radius: 5px;
+      padding: 5px
+    }
+
+    .safe {
+      background-color: #82d492
+    }
+
+    .danger {
+      background-color: #d48383
+    }
+
+    .base {
+      background-color: #7f9dd4
+    }
+
+    button:active {
+      background-color: #222;
+      color: #aaa;
+    }
+
+    .meter {
+      margin: 5px;
+      margin-left: 20px;
+      height: 18px;
+      /* Can be anything */
+      width: 150px;
+      position: relative;
+      background: #555;
+      border-radius: 25px;
+      padding: 2px;
+      box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .meter>span {
+      display: block;
+      height: 100%;
+      border-radius: 25px;
+      background-color: rgb(43, 194, 83);
+      background-image: linear-gradient( center bottom,
+      rgb(43, 194, 83) 37%,
+      rgb(84, 240, 84) 69%);
+      box-shadow: inset 0 2px 9px rgba(255, 255, 255, 0.3),
+      inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .orange>span {
+      background-color: #f1a165;
+      background-image: linear-gradient(to bottom, #f1a165, #f36d0a);
+    }
+
+    .red>span {
+      background-color: #f0a3a3;
+      background-image: linear-gradient(to bottom, #f0a3a3, #f42323);
+    }
+
+    .circ {
+      width: 60px;
+      height: 60px;
+      margin-left: 20px;
+      margin-bottom: 5px;
+    }
+
+    .wrapper {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      clip: rect(0px, 60px, 60px, 30px);
+    }
+
+    .val {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      text-align: center;
+      padding: auto;
+      color: #aaa;
+      vertical-align: middle;
+      line-height: 60px;
+    }
+
+    .circle {
+      width: 56px;
+      height: 56px;
+      border: 2px solid #82d492;
+      border-radius: 30px;
+      position: absolute;
+      clip: rect(0px, 30px, 60px, 0px);
+    }
+
+    .frame {
+      width: 57px;
+      height: 57px;
+      border-radius: 28px;
+      border: 0.5px #444 solid;
+    }
+
+    .afterhalf {
+      clip: rect(auto, auto, auto, auto);
+    }
+
+    .arrowCont {
+      margin-left: 20px;
+      margin-bottom: 5px;
+    }
+
+    .arrow {
+      margin-left: 22px;
+      margin-top: 20px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-bottom: 20px solid #82d492;
+    }
+
+    .modalDialog {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 99999;
+      display:none;
+    }
+
+    .modalDialog>div {
+      width: 200px;
+      position: relative;
+      margin: 10% auto;
+      padding: 5px 20px 13px 20px;
+      border-radius: 10px;
+      background: #fff;
+      background: -moz-linear-gradient(#fff, #999);
+      background: -webkit-linear-gradient(#fff, #999);
+      background: -o-linear-gradient(#fff, #999);
+      color:#222;
+    }
+    .modalButt {
+      text-align: center;
+    }
+
+  </style>
+</head>
+
+<body>
+  <ul class="tabs">
+    <li class="tab">
+      <input type="radio" name="tabs" checked="checked" id="tab1" />
+      <label for="tab1">Status</label>
+      <div id="tab-content1" class="content">
+        <table>
+          <tr>
+            <td>Camera</td>
+            <td>
+              <div id="lcam"></div>
+            </td>
+          </tr>
+          <tr>
+            <td>Home</td>
+            <td>
+              <div id='lhome'></div>
+            </td>
+          </tr>
+          <tr>
+            <td>Prog</td>
+            <td>
+              <div id="prg1">
+
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </li>
+    <li class="tab">
+      <input type="radio" name="tabs" id="tab2" />
+      <label for="tab2">YI cam</label>
+      <div id="tab-content2" class="content">
+        <table>
+          <tr>
+            <td>
+              <label for='cap'>AP</label>
+            </td>
+            <td>
+              <input id="cap"> </input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for='cps'>PWD</label>
+            </td>
+            <td>
+              <input id="cps"> </input>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button class="safe">Connect </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </li>
+
+    <li class="tab">
+      <input type="radio" name="tabs" id="tab3" />
+      <label for="tab3">Steps</label>
+      <div id="tab-content3" class="content">
+      </div>
+    </li>
+  </ul>
+  <div id="modal" class="modalDialog">
+    <div>
+      <h2 id="modalTitle"></h2>
+      <p id="modalContent">
+      </p>
+      <div class="modalButt">
+        <button onclick="modalClose()">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    function httpGet(url, callback) {
+  callback = typeof callback  === 'undefined' ? null : callback;
+  var xmlHttp = new XMLHttpRequest();
+  if (callback != null) {
+    xmlHttp.onreadystatechange = function () {
+      if (xmlHttp.readyState == 4) {
+        callback(xmlHttp.status, xmlHttp.responseText);
+      }
+    };
+  }
+  xmlHttp.open("GET", url, true);
+  xmlHttp.send(null);
+}
+function gEl(id) {
+  return document.getElementById(id);
+}
+function gElCls(cls) {
+  return document.getElementsByClassName(cls);
+}
+function rmCls(el, cls) {
+  if (HTMLCollection.prototype.isPrototypeOf(el)) {
+    for (i = 0; i < el.length; i++) {
+      el[i].classList.remove(cls);
+    }
+  } else {
+    el.classList.remove(cls);
+  }
+}
+function addCls(el, cls) {
+  if (HTMLCollection.prototype.isPrototypeOf(el)) {
+    for (i = 0; i < el.length; i++) {
+      el[i].classList.add(cls);
+    }
+  } else {
+    el.classList.add(cls);
+  }
+}
+function setCls(el, cls) {
+  if (HTMLCollection.prototype.isPrototypeOf(el)) {
+    for (i = 0; i < el.length; i++) {
+      el[i].className = cls;
+    }
+  } else {
+    el.className = cls;
+  }
+}
+function createMeter(id, color) {
+  color = typeof color  === 'undefined' ? 'green' : color;
+  el = gEl(id);
+  setCls(el, "meter " + color);
+  el.innerHTML = "<span style='width: 0%'></span>";
+}
+function meterVal(id, val) {
+  gEl(id).childNodes[0].style.width = String(val) + '%';
+}
+function ledOff(id) {
+  setCls(gEl(id), "led");
+}
+function ledOn(id, color) {
+
+  setCls(gEl(id), "led led-" + color);
+}
+function createCirc(id) {
+  el = gEl(id);
+  el.innerHTML = '<div class="val">0%</div><div class="wrapper"><div class="circle" ></div><div class="circle" ></div></div><div class="frame"></div>';
+  setCls(el, "circ");
+}
+function circVal(id, val) {
+  el = gEl(id);
+  var angl = 360.0 / 100 * val;
+  if (val >= 50) {
+    setCls(el.childNodes[1], "wrapper afterhalf");
+  } else {
+    setCls(el.childNodes[1], "wrapper");
+  }
+  if (val <= 50) {
+    el.childNodes[1].childNodes[1].style.transform = 'rotate(' + String(angl) + 'deg)';
+  } else {
+    el.childNodes[1].childNodes[1].style.transform = 'rotate(180deg)';
+  }
+  el.childNodes[1].childNodes[0].style.transform = 'rotate(' + String(angl) + 'deg)';
+  el.childNodes[0].innerHTML = String(val) + '%';
+}
+function createArr(id) {
+  el = gEl(id);
+  setCls(el, "frame arrowCont");
+  el.innerHTML = '<div class="arrow"></div>';
+}
+function arrVal(id, deg) {
+  gEl(id).childNodes[0].style.transform = 'rotate(' + String(deg) + 'deg)';
+}
+function modalOpen(title,msg){
+  gEl('modalTitle').innerHTML = title;
+  gEl('modalContent').innerHTML = msg;
+  gEl('modal').style.display='block';
+}
+function modalClose(){
+  gEl('modal').style.display = 'none';
+}
+  </script>
+
+  <script>
+    window.onload = function () {
+      var angle = 0;
+      var prog = 0;
+
+
+      createCirc('lcam');
+      createArr('lhome');
+      createMeter("prg1");
+
+
+
+
+      setInterval(function () {
+        angle = Math.floor((Math.random() * 360) + 1);
+        prog = Math.floor((Math.random() * 100) + 1);
+
+        circVal("lcam", prog);
+        arrVal('lhome', angle);
+        meterVal('prg1', prog);
+
+
+      }, 1000);
+
+
+    };
+
+  </script>
+</body>
+
+</html>

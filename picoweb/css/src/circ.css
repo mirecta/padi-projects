@@ -1,0 +1,44 @@
+  .circ {
+    width: 60px;
+    height: 60px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
+
+  .wrapper {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    clip: rect(0px, 60px, 60px, 30px);
+  }
+
+  .val {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    padding: auto;
+    color: #aaa;
+    vertical-align: middle;
+    line-height: 60px;
+  }
+
+  .circle {
+    width: 56px;
+    height: 56px;
+    border: 2px solid #82d492;
+    border-radius: 30px;
+    position: absolute;
+    clip: rect(0px, 30px, 60px, 0px);
+  }
+
+  .frame {
+    width: 57px;
+    height: 57px;
+    border-radius: 28px;
+    border: 0.5px #444 solid;
+  }
+
+  .afterhalf {
+    clip: rect(auto, auto, auto, auto);
+  }

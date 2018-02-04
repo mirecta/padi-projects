@@ -1,0 +1,23 @@
+input {
+    background-color: #aaa;
+    border: 1px solid #111;
+    border-radius: 5px;
+    padding:5px;
+    width:120px;
+  }
+  .short {width 50px;}
+  
+  button {
+    background-color: #ccc;
+    border: 1px solid #111;
+    border-radius: 5px;
+    padding:5px
+  }
+  .safe {background-color:#82d492}
+  .danger{background-color:#d48383}
+  .base{background-color:#7f9dd4}
+  
+  button:active {
+     background-color: #222; 
+     color:#aaa;
+  }

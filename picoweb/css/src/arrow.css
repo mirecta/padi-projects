@@ -1,0 +1,14 @@
+  .arrowCont {
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
+
+  .arrow {
+    margin-left: 22px;
+    margin-top: 20px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 20px solid #82d492;
+  }
