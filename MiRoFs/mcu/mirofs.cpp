@@ -1,5 +1,6 @@
 
-#include<memory.h>
+#include <memory.h>
+#include <string.h>
 #include "mirofs.h"
 
 
@@ -26,10 +27,22 @@ void MFSFile::close(){
 
 int MFS::init(){
     //read header
+    uint32_t r = roMem.readBytes(0,&header,sizeof(header));
+    if (r != sizeof(header)) return 0;
     //compare filename sizes
+    if( header.fnameSize !=FILENAME_SIZE) return 0;
+    return 1;
 }
 
 MFSFile* MFS::open(const char*filename){
+    if (!filename) return 0;
+    int len = strlen(filename);
+    if (len == 0) return 0;
+    if (filename[0] == '/'){
+        filename = &filename[1];
+    }
+    //now we can try find file
+    
     return 0;
 }
 /*
