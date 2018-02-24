@@ -1,7 +1,7 @@
 CXX      := -c++
 CXXFLAGS := -pedantic-errors -Wall -Wextra -Werror
 LDFLAGS  := -L/usr/lib -lstdc++ -lm
-DEPS = test.h
+DEPS = test.h mfs.h
 OBJ = test.o mirofs.o 
 
 %.o: %.c $(DEPS)
