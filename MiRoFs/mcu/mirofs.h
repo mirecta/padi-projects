@@ -1,15 +1,16 @@
 #ifndef _MIROFS_H_
 #define _MIROFS_H_
+#include <inttypes.h>
 
-FILENAME_SIZE=32;
+#define FILENAME_SIZE 36
 
 class RoMem{
 public:
-    RoMem(void *addr, uint32_t size = 0)
+    RoMem(const void *addr, uint32_t size = 0)
     :addr(addr), memSize(size)
     {}
 
-    uint32_t readBytes(uint32_t offset, uint8_t *data, uint32_t size) const {
+    uint32_t readBytes(uint32_t offset, void *data, uint32_t size) const {
         if (memSize !=0){
             if (offset >= memSize)
                 return 0;
@@ -17,13 +18,13 @@ public:
                 size = memSize - offset;
         }
 
-        return _readBytes(addr + offset, data, size);
+        return _readBytes((uint8_t*)addr + offset, data, size);
     }
 private:
-    virtual uint32_t _readBytes(void *addr, uint8_t *data, uint32_t size) const
+    virtual uint32_t _readBytes(const void *addr, void *data, uint32_t size) const;
 
 private:
-    void* addr;
+    const void* addr;
     uint32_t memSize;
 };
 /*
@@ -37,13 +38,13 @@ struct MFSHeader {
     uint8_t fnameSize;
     uint32_t size;
     uint32_t endOffset;
-} mfsHeader;
+} __attribute__((packed));
 
 struct MFSFHeader{
    char fname[FILENAME_SIZE];
    uint32_t size;
    uint32_t offset; 
-};
+}__attribute__((packed));
 
 class MFSFile {
     friend class MFS;
@@ -62,11 +63,11 @@ public:
     void close();
 
 private:
-    MFSFHeader_t header;
+    MFSFHeader header;
     uint32_t offset;
     uint32_t position;
     RoMem *roMem;
-} mfsFile;
+};
 
 class MFS {
     public: 
@@ -77,7 +78,7 @@ class MFS {
         MFSFile* open(const char *filename);
 
     private:
-        RoMem &roMem
+        RoMem &roMem;
         MFSHeader header;
 };
 

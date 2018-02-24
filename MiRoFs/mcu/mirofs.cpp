@@ -4,7 +4,7 @@
 #include "mirofs.h"
 
 
-uint32_t RoMem::_readBytes(uint8_t *addr, uint8_t *data, uint32_t size){
+uint32_t RoMem::_readBytes(const void *addr, void *data, uint32_t size) const{
     memcpy(data,addr,size);
     return size;
 }
@@ -73,3 +73,5 @@ int bs_lower_bound(int a[], int n, int x) {
     }
     return l;
 }*/
+MFSFHeader mfsHeader;
+MFSFile mfsFile;
