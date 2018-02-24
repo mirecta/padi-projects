@@ -36,8 +36,8 @@ fileheader
 struct MFSHeader {
     char magic[6];
     uint8_t fnameSize;
-    uint32_t size;
     uint32_t endOffset;
+    uint32_t count;
 } __attribute__((packed));
 
 struct MFSFHeader{

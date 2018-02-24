@@ -60,7 +60,7 @@ def main():
     
     count = len(fls)
     #sort for binary search     
-    fls.sort(key=lambda tup: tup[1])
+    fls.sort(key=lambda tup: tup[0])
 
     out = StringIO()
     contentPart = StringIO()
