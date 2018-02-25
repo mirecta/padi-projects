@@ -100,7 +100,7 @@ def main():
     if args.type == 'bin':
         outfl.write(data)
     else:
-        outfl.write("const unsigned char mfs[] = { \n")
+        outfl.write("const unsigned char mfsData[] = { \n")
         
         i = 0
         for i in xrange(0,ldata,30):

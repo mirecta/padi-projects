@@ -49,24 +49,25 @@ struct MFSFHeader{
 class MFSFile {
     friend class MFS;
 public:
-    MFSFile():roMem(0) {}
+    MFSFile():header(0),roMem(0) {}
 
     uint32_t size() const 
     {
-        return header.size;
+        if(header == 0) return 0;
+        return header->size;
     }
     const char* name() const
     {
-        return header.fname;
+        if(header == 0) return "no such file!";
+        return header->fname;
     }
     uint32_t read(void *buf, uint32_t size);
     void close();
-
 private:
-    MFSFHeader header;
-    uint32_t offset;
-    uint32_t position;
+    MFSFHeader *header;
     RoMem *roMem;
+    uint32_t position;
+    
 };
 
 class MFS {
@@ -76,6 +77,9 @@ class MFS {
 
         int init();
         MFSFile* open(const char *filename);
+    
+    private:
+        MFSFHeader* getFhAt(int i);
 
     private:
         RoMem &roMem;

@@ -14,17 +14,18 @@ uint32_t RoMem::_readBytes(const void *addr, void *data, uint32_t size) const{
 
 uint32_t MFSFile::read(void *buf, uint32_t size){
 
-    if(roMem == 0) return 0;
-    if (size > header.size - position){
-        size = header.size - position; 
+    if(roMem == 0 || header == 0) return 0;
+    if (size > header->size - position){
+        size = header->size - position; 
     }
-    size = roMem->readBytes(offset + position, buf, size);
+    size = roMem->readBytes(header->offset + position, buf, size);
     position += size;
     return size;
 }
+
 void MFSFile::close(){
    roMem = 0;
-   offset = 0;
+   header = 0;
    position = 0; 
 }
 
@@ -35,6 +36,14 @@ int MFS::init(){
     //compare filename sizes
     if( header.fnameSize !=FILENAME_SIZE) return 0;
     return 1;
+}
+
+MFSFHeader* MFS::getFhAt(int i){
+    if ((uint32_t)i >= header.count){
+        return 0;
+    }
+    roMem.readBytes((sizeof(MFSHeader) + i * sizeof(MFSFHeader)),&mfsFHeader,sizeof(MFSFHeader));
+    return &mfsFHeader;
 }
 
 MFSFile* MFS::open(const char*filename){
@@ -53,55 +62,21 @@ MFSFile* MFS::open(const char*filename){
         it = first;
         step = count/2;
         it += step;
-        //printf(">>>>count %d, step %d, it %d first %d\n",count,step,it,first);
-        //read file header at it
-        roMem.readBytes((sizeof(MFSHeader) + it * sizeof(MFSFHeader)),&mfsFHeader,sizeof(MFSFHeader));
-        //printf("%d %s\n",it,mfsFHeader.fname);
-        if (strcmp(mfsFHeader.fname,filename) < 0) {
+        if (strcmp(getFhAt(it)->fname,filename) < 0) {
             first = ++it;
             count -= step + 1;
         } else {
             count=step;
         }
-        //printf("count %d, step %d, it %d first %d\n",count,step,it,first);
     }
-    roMem.readBytes((sizeof(MFSHeader) + first * sizeof(MFSFHeader)),&mfsFHeader,sizeof(MFSFHeader));
-    int index = (first != (int)header.count && !strcmp(mfsFHeader.fname,filename )) ? first : -1;
-    if (index >= 0){
-        printf("found:%d %s \n",index,mfsFHeader.fname);
+    if((uint32_t)first != header.count && !strcmp(getFhAt(first)->fname,filename)){
+        //printf("found:%d %s \n",first,mfsFHeader.fname);
+        mfsFile.close();
+        mfsFile.header = &mfsFHeader;
+        mfsFile.roMem = &roMem;
+        return &mfsFile;
     }else{
-       printf("not found:%d %s\n", index,filename); 
+       //printf("not found:%d %s\n", first,filename); 
+       return 0;
     }
-
-    //printf("%d %s\n",l,mfsFHeader.fname);
-    //l is possible result
-    return 0;
 }
-/*
-int bs_upper_bound(int a[], int n, int x) {
-    int l = 0;
-    int h = n; // Not n - 1
-    while (l < h) {
-        int mid = (l + h) / 2;
-        if (x >= a[mid]) {
-            l = mid + 1;
-        } else {
-            h = mid;
-        }
-    }
-    return l;
-}
-
-int bs_lower_bound(int a[], int n, int x) {
-    int l = 0;
-    int h = n; // Not n - 1
-    while (l < h) {
-        int mid = (l + h) / 2;
-        if (x <= a[mid]) {
-            h = mid;
-        } else {
-            l = mid + 1;
-        }
-    }
-    return l;
-}*/
