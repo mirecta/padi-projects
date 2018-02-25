@@ -6,9 +6,12 @@ import sys
 from cStringIO import StringIO
 import zlib
 
-
-
-
+"""
+deflate_compress = zlib.compressobj(9, zlib.DEFLATED, -zlib.MAX_WBITS)
+zlib_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS)
+gzip_compress = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+compressor = gzip_compress
+"""
 """
 fs header
 |MiRoFs(6)|fnamesize(1)|size(4)|filecount(4)| = 15
@@ -70,7 +73,8 @@ def main():
         inData = infl.read()
         infl.close()
         if args.gzip:
-            inData = zlib.compress(inData,9)
+            compressor = zlib.compressobj(9, zlib.DEFLATED, zlib.MAX_WBITS | 16)
+            inData = compressor.compress(inData) + compressor.flush()
         #endif
         contentPart.write(inData)
         item[1] = len(inData)
